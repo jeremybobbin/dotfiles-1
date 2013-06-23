@@ -107,3 +107,4 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 PATH=$PATH:~/scripts
 export EDITOR=vim
+source ~/scripts/settings
