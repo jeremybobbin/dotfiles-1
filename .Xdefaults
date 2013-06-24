@@ -1,0 +1,14 @@
+#
+# Terminal
+#
+
+# Color
+URxvt*foreground: White
+URxvt*background: Black
+
+# Font
+URxvt*font: xft:DejaVu Sans Mono:pixelsize=11:antialias=true:hinting=true
+URxvt*boldFont: xft:DejaVu Sans Mono:bold:pixelsize=11:antialias=true:hinting=true
+
+# Style
+URxvt*scrollBar: false

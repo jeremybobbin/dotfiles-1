@@ -1,3 +1,3 @@
-keycode 66 = space
+keycode 66 = Control_L
 clear Lock
-add Control = space
+add Control = Control_L
