@@ -1,3 +1,20 @@
 [user]
 	name = Stephen A. Balaban
 	email = s@lambdal.com
+[core]
+	editor = /usr/bin/vim
+[alias]
+  p = push
+  br = branch
+  cm = commit
+  co = checkout
+  d = diff --color
+  g = grep -I
+  lg = log
+  pb = publish-branch
+  pp = !"echo 'Pull'; git pull; echo 'Push'; git push"
+  st = status
+  sl = shortlog
+
+[color]
+	ui = true

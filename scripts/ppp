@@ -1,8 +1,13 @@
 #!/bin/bash
 # Pushes last commit on current branch, opens pull request on github
 #
-# Stephen A. Balaban <stephen@stephenbalaban.com>
+# Stephen A. Balaban <s@lambdal.com>
 #
+# Requires hub: 
+#
+#	`brew install hub`
+#
+
 HEAD=`git rev-parse --abbrev-ref HEAD`
 DEFAULT_BASE=develop
 REPO=`git remote -v | grep -o :.*\.git | sed 's/://' | sed 's/\.git//' | tail -n1`
