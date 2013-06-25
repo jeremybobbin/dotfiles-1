@@ -1,2 +1,8 @@
 #!/bin/bash
-source ~/.bashrc
+if [ -a ~/.bashrc ]; then
+	source ~/.bashrc
+elif [ -a ~/.bash_profile ]; then
+	source ~/.bash_profile
+else
+	echo "Couldn't source ~/.bashrc or ~/.bash_profile."
+fi;
