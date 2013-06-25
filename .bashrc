@@ -107,3 +107,8 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 PATH=$PATH:~/scripts
 export EDITOR=vim
+PATH=$PATH:/Applications/Xcode.app/Contents/Developer/usr/bin/
+
+# Aliases
+alias work='cd ~/WORK'
+alias play='cd ~/PLAY'
