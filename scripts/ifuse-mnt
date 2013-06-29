@@ -6,7 +6,7 @@ cd $LIB;
 sudo kextload fuse4x.kext/
 cd -;
 if [[ $1 ]]; then
-	ifuse --appid $APP $1
+	sudo ifuse --appid $APP $1
 else
 	echo 'usage: ./ifuse-mnt [folder]'
 fi;

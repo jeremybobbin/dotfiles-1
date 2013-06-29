@@ -1,0 +1,3 @@
+#!/bin/sh
+kill -9 `ps ax | grep -i xcode | awk { print }`
+open /Applications/Xcode.app
