@@ -114,3 +114,11 @@ export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/build
 export USE_CCACHE=1
 export PATH=$PATH:/home/sabalaba/gcc-arm-none-eabi-4_6-2012q2/bin
 export USE_CCACHE=1
+
+case $OSTYPE in 
+darwin*) PATH=$PATH:/Applications/Xcode.app/Contents/Developer/usr/bin/ ;;
+esac
+
+# Aliases
+alias work='cd ~/WORK'
+alias play='cd ~/PLAY'

@@ -1,0 +1,12 @@
+#!/bin/bash
+# Courtesy of ZS
+APP=PP.Pocket-Pigeon
+LIB=/Library/Extensions
+cd $LIB;
+sudo kextload fuse4x.kext/
+cd -;
+if [[ $1 ]]; then
+	sudo ifuse --appid $APP $1
+else
+	echo 'usage: ./ifuse-mnt [folder]'
+fi;
