@@ -122,3 +122,6 @@ esac
 # Aliases
 alias work='cd ~/WORK'
 alias play='cd ~/PLAY'
+
+# Never use emacs gui...
+alias emacs='emacs -nw'
