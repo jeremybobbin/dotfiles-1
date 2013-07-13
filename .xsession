@@ -1,4 +1,4 @@
 #!/bin/sh
 exec /usr/bin/stumpwm
-xmodmap /home/dotfiles/capslock
+xmodmap /home/sabalaba/dotfiles/capslock
 exec /home/sabalaba/dotfiles/monitor

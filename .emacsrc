@@ -1,0 +1,2 @@
+;; Set the alt key as meta.
+(setq x-alt-keysym 'meta)

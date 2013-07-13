@@ -14,6 +14,9 @@
 (defun make-shell-command (cmd)
 	(concatenate 'string "exec " *terminal* " -e " cmd))
 
+(defparameter *notes* "exec nvpy"
+	"Use notational velocity as the default note taker.")
+
 (defparameter *browser* "exec chromium-browser"
 	"Use chromium as the default browser.")
 
@@ -27,6 +30,7 @@
 (define-key *root-map* (kbd "b") *browser*)
 (define-key *root-map* (kbd "e") *editor*)
 (define-key *root-map* (kbd "c") *terminal*)
+(define-key *root-map* (kbd "N") *notes*)
 
 ;; Startup ;;
 (defun pikachu ()
