@@ -1,2 +1,2 @@
 #!/bin/sh
-xrandr --output DP1 --mode 2560x1600
+xrandr --output DP1 --mode 2560x1600 --left-of eDP1

@@ -1,0 +1,16 @@
+#!/bin/bash
+if [ ! $1 ]; then
+	echo "Usage ./adb_search_packages <package_search_string>"
+	exit 1;
+fi;
+PACK_SEARCH=$1
+package_name=$(adb shell pm list packages -f | grep -i $PACK_SEARCH | sed s/.*=// | tr -d '\n')
+echo $package_name
+read -p "Uninstall?" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	echo
+	echo "Run this:"
+	echo
+	echo "adb uninstall $package_name"
+fi

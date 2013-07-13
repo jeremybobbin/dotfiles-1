@@ -106,8 +106,8 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 export EDITOR=vim
-source ~/scripts/settings
-export PATH=$PATH:~/scripts:~/bin
+source ~/public_scripts/settings
+export PATH=$PATH:~/public_scripts:~/bin
 export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/platform-tools
 export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/tools
 export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/build-tools/android-4.2.2
