@@ -108,9 +108,11 @@ fi
 export EDITOR=vim
 source ~/public_scripts/settings
 export PATH=$PATH:~/public_scripts:~/bin
-export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/platform-tools
-export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/tools
-export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/build-tools/android-4.2.2
+#export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/platform-tools
+#export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/tools
+#export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/build-tools/android-4.2.2
+export PATH=${PATH}:/home/sabalaba/data/android-sdks/tools
+export PATH=${PATH}:/home/sabalaba/data/android-sdks/platform-tools
 export USE_CCACHE=1
 export PATH=$PATH:/home/sabalaba/gcc-arm-none-eabi-4_6-2012q2/bin
 export USE_CCACHE=1

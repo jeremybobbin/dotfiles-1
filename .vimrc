@@ -90,9 +90,9 @@ syntax on
 :ca pv Pv
 
 " Slimv - Superier Lisp Interaction Mode for Vim
-let g:slimv_swank_clojure = '! lein swank &'
-let g:slimv_swank_cmd = '! lein swank &'
+"let g:slimv_swank_clojure = '! lein swank &'
+"let g:slimv_swank_cmd = '! lein swank &'
 
 " Start NERDTree on startup
-autocmd VimEnter * NERDTree
-autocmd VimEnter * wincmd p
+" autocmd VimEnter * NERDTree
+" autocmd VimEnter * wincmd p
