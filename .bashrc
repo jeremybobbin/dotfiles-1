@@ -127,3 +127,4 @@ alias play='cd ~/PLAY'
 
 # Never use emacs gui...
 alias emacs='emacs -nw'
+export PATH=~/pebble-dev/arm-cs-tools/bin:$PATH

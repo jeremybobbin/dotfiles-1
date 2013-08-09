@@ -1,0 +1,8 @@
+#!/bin/sh
+# print column n of file
+if [ $2 ]; then
+    N=$2
+else 
+    N=1
+fi
+cat $1 | awk "{ print \$$N }"
