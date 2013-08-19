@@ -20,8 +20,8 @@
 (defparameter *browser* "exec chromium-browser"
 	"Use chromium as the default browser.")
 
-(defparameter *terminal* "exec urxvt"
-	"Use urxvt as the default terminal emulator.")
+(defparameter *terminal* "exec gnome-terminal"
+	"Use gnome-terminal as the default terminal emulator.")
 
 (defparameter *editor* (make-shell-command "vim") 
 	"Use vi as the default editor.")
