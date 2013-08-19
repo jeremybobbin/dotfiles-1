@@ -5,6 +5,7 @@ filetype plugin on
 set nocompatible
 set nocp
 
+set nu
 set modelines=0
 set tabstop=4
 set shiftwidth=4
@@ -96,3 +97,6 @@ syntax on
 " Start NERDTree on startup
 " autocmd VimEnter * NERDTree
 " autocmd VimEnter * wincmd p
+
+set listchars=eol:⇃,tab:→\ ,trail:↤,extends:>,precedes:<
+set list
