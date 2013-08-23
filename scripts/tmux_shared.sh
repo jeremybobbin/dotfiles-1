@@ -15,21 +15,27 @@ Usage:
 EOF
     exit 1
 }
+socket_name() {
+    echo "session_${1}.sock"
+}
 case "$1" in
     ls)
-        ls /tmp | grep -P "^session_"
+        ls /tmp | grep -P "^session_" | sed 's/\.sock$//g'
         ;;
     start)
         if ! [[ $2 ]]; then usage; fi;
         SESSION_NAME=$2
-        tmux -S /tmp/${SESSION_NAME}.sock new -s $SESSION_NAME
-        sudo chmod 777 /tmp/${SESSION_NAME}.sock
-        sudo chgrp tmux-shared /tmp/${SESSION_NAME}.sock
+        SOCKET_NAME=`socket_name $SESSION_NAME`
+        touch /tmp/$SOCKET_NAME
+        sudo chmod 777 /tmp/$SOCKET_NAME
+        sudo chgrp tmux-shared /tmp/$SOCKET_NAME
+        tmux -S /tmp/$SOCKET_NAME new -s $SESSION_NAME
         ;;
     attach)
         if ! [[ $2 ]]; then usage; fi;
         SESSION_NAME=$2
-        tmux -S /tmp/${SESSION_NAME}.sock attach -t $SESSION_NAME
+        SOCKET_NAME=`socket_name $SESSION_NAME`
+        tmux -S /tmp/$SOCKET_NAME attach -t $SESSION_NAME
         ;;
     *)
         usage;
