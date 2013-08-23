@@ -22,7 +22,7 @@ case "$1" in
     start)
         if ! [[ $2 ]]; then usage; fi;
         SESSION_NAME=$2
-        tmux -S /tmp/${SESSION_NAME}.sock new -s shared
+        tmux -S /tmp/${SESSION_NAME}.sock new -s $SESSION_NAME
         sudo chmod 777 /tmp/${SESSION_NAME}.sock
         sudo chgrp tmux-shared /tmp/${SESSION_NAME}.sock
         ;;
