@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 #    tmux_shared.sh
 #    =========
