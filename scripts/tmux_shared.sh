@@ -8,18 +8,29 @@
 #    :copyright: (c) 2013, Lambda Labs, Inc.
 #    :license: All Rights Reserved.
 #
+usage() {
+    cat <<EOF
+Usage:
+    ./`basename $0` {ls|start|attach} session_name
+EOF
+    exit 1
+}
 case "$1" in
+    ls)
+        ls /tmp | grep -P "^session_"
+        ;;
     start)
-        tmux -S /tmp/shareds new -s shared
-        sudo chgrp tmux-shared /tmp/shareds
+        if ! [[ $2 ]]; then usage; fi;
+        SESSION_NAME=$2
+        tmux -S /tmp/${SESSION_NAME}.sock new -s shared
+        sudo chmod 777 /tmp/${SESSION_NAME}.sock
+        sudo chgrp tmux-shared /tmp/${SESSION_NAME}.sock
         ;;
     attach)
-        tmux -S /tmp/shareds attach -t shared
+        if ! [[ $2 ]]; then usage; fi;
+        SESSION_NAME=$2
+        tmux -S /tmp/${SESSION_NAME}.sock attach -t $SESSION_NAME
         ;;
     *)
-        cat <<EOF
-Usage:
-    ./`basename $0` {start|attach}
-EOF
-        exit 1
+        usage;
 esac
