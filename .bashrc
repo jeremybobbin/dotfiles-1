@@ -13,8 +13,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=
+HISTFILESIZE=
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -130,3 +130,6 @@ alias emacs='emacs -nw'
 export PATH=~/pebble-dev/arm-cs-tools/bin:$PATH
 export PATH=$PATH:/home/sabalaba/Pictures/out_garry_yc_s13_happyhour_Fri-Aug--9-14:55:50-PDT-2013/lmb/scripts/
 export LD_LIBRARY_PATH=/home/$USER/eagle-6.2.0/lib
+
+# Set prompt command
+export PROMPT_COMMAND='V=$?; history -a; echo "Return value: $V"'
