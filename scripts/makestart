@@ -1,0 +1,7 @@
+cat <<EOF
+# Makefile for $1
+CFLAGS=-Wall -g
+
+clean:
+    rm -f $1
+EOF
