@@ -7,10 +7,6 @@ set nocp
 
 set nu
 set modelines=0
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set expandtab
 
 set encoding=utf-8
 set scrolloff=3
@@ -100,3 +96,13 @@ syntax on
 
 set listchars=eol:⇃,tab:→\ ,trail:↤,extends:>,precedes:<
 set list
+
+if has("autocmd")
+  " enable file type search
+  filetype plugin on
+  " use filetype indent
+  filetype indent on
+    " Consistent with the Linux Kernel Coding Style Guidelines
+    autocmd FileType c,cpp  set noexpandtab tabstop=8 shiftwidth=8 textwidth=78
+    autocmd FileType python set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=79
+endif
