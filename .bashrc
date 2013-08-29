@@ -113,9 +113,7 @@ export PATH=$PATH:~/public_scripts:~/bin
 #export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/build-tools/android-4.2.2
 export PATH=${PATH}:/home/sabalaba/data/android-sdks/tools
 export PATH=${PATH}:/home/sabalaba/data/android-sdks/platform-tools
-export USE_CCACHE=1
 export PATH=$PATH:/home/sabalaba/gcc-arm-none-eabi-4_6-2012q2/bin
-export USE_CCACHE=1
 
 case $OSTYPE in 
 darwin*) PATH=$PATH:/Applications/Xcode.app/Contents/Developer/usr/bin/ ;;
@@ -132,4 +130,9 @@ export PATH=$PATH:/home/sabalaba/Pictures/out_garry_yc_s13_happyhour_Fri-Aug--9-
 export LD_LIBRARY_PATH=/home/$USER/eagle-6.2.0/lib
 
 # Set prompt command
-export PROMPT_COMMAND='L=$_;V=$?; history -a; echo "$V"'
+export PROMPT_COMMAND='V=$?; history -a; echo "$V"'
+
+# Android
+export USE_CCACHE=1
+export CCACHE_DIR=/data/.android-cache
+export PATH=$PATH:/data/linaro/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.7-linaro/bin/
