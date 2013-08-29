@@ -94,7 +94,7 @@ fi
 # set PS1 to include the last
 MYPSDIR='$(echo "${PWD/#$HOME/~}")'
 # color the last status red if error status.
-LAST_STATUS='$(LS=$?;if [ $LS -eq 0 ]; then echo $LS; else echo -e "\e[1;31m${LS}\e[0m"; fi)'
+LAST_STATUS='$(echo $?)'
 PS1='$(eval "echo $LAST_STATUS")|$USER@$HOSTNAME:$(eval "echo $MYPSDIR")$ '
 
 export EDITOR=vim
@@ -128,3 +128,5 @@ export PROMPT_COMMAND='LAST_CMD_STATUS=$?; history -a;'
 export USE_CCACHE=1
 export CCACHE_DIR=/data/.android-cache
 export PATH=$PATH:/data/linaro/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.7-linaro/bin/
+
+export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
