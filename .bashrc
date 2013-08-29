@@ -130,7 +130,7 @@ export PATH=$PATH:/home/sabalaba/Pictures/out_garry_yc_s13_happyhour_Fri-Aug--9-
 export LD_LIBRARY_PATH=/home/$USER/eagle-6.2.0/lib
 
 # Set prompt command
-export PROMPT_COMMAND='V=$?; history -a; echo "$V"'
+export PROMPT_COMMAND='LAST_CMD_STATUS=$?; history -a;'
 
 # Android
 export USE_CCACHE=1
