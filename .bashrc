@@ -131,3 +131,4 @@ export PATH=$PATH:/data/linaro/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi
 
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
 export GOPATH=~/data/programming/go/path
+export PATH=$PATH:$GOPATH/bin
