@@ -92,7 +92,7 @@ fi
 
 
 # set PS1 to include the last
-MYPSDIR='$(echo "${PWD/#$HOME/~}")'
+MYPSDIR='$(echo "`basename ${PWD/#$HOME/~}`")'
 # color the last status red if error status.
 LAST_STATUS='$(echo $?)'
 PS1='$(eval "echo $LAST_STATUS")|$USER@$HOSTNAME:$(eval "echo $MYPSDIR")$ '

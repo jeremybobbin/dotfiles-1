@@ -103,7 +103,7 @@ if has("autocmd")
   " use filetype indent
   filetype indent on
     " Consistent with the Linux Kernel Coding Style Guidelines
-    autocmd FileType c,cpp  set noexpandtab tabstop=8 shiftwidth=8 textwidth=78
+    autocmd FileType go,c,cpp  set noexpandtab tabstop=8 shiftwidth=8 textwidth=78
     autocmd FileType html  set noexpandtab tabstop=8 shiftwidth=8 textwidth=78
-    autocmd FileType python set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=79
+    autocmd FileType python,lua set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=79
 endif
