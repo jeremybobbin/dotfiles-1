@@ -1,3 +1,4 @@
 server() {
-  open "http://localhost:${1}" && python -m SimpleHTTPServer $1
+ 	python -m SimpleHTTPServer $1
 }
+server
