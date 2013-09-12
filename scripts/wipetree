@@ -1,0 +1,4 @@
+#!/bin/bash
+# number of iterations
+N=5
+find $1 -type f -exec shred -vfz -n $N {} \;
