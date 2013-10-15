@@ -1,2 +1,4 @@
 #!/bin/sh
-date | sed 's/ /-/g'
+date | 	sed 's/  /_/' | 
+	sed 's/:/-/g'    |
+	sed 's/ /_/g'

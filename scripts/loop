@@ -1,0 +1,30 @@
+#!/bin/sh
+COMMAND='eval usage;exit'
+SLEEPTIME=1
+usage() {
+	cat <<EOF
+Usage:
+	$0 [-h] [-s SLEEPTIME] -c command
+EOF
+}
+while getopts ":c:hs:" OPTION
+do
+	case "$OPTION" in
+		s)
+			SLEEPTIME=$OPTARG
+			;;
+		c)
+			COMMAND="$OPTARG"
+			;;
+		h*|?)
+			usage
+			exit
+			;;
+	esac
+done
+
+while :
+do
+	eval "$COMMAND"
+	sleep $SLEEPTIME
+done
