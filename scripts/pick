@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 for i
 do
-	echo "$i? \c" 1>&2
+	echo -e "$i? \c" 1>&2
 	read answer
-	if [ $answer = "y" ]; then
+	if [ "$answer" == "y" ]; then
 		echo $i
 	fi;
 done;
