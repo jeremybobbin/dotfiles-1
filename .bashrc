@@ -132,3 +132,11 @@ export PATH=$PATH:/data/linaro/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
 export GOPATH=~/data/programming/go/path
 export PATH=$PATH:$GOPATH/bin
+
+# Boost
+export BOOST_INCLUDE_PATH=/usr/include/boost
+export BOOST_LIB_PATH=/usr/lib
+export BOOST_LIB_SUFFIX=
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-5.5/lib64:/lib
+# Add cuda binaries to the path.
+export PATH=$PATH:/usr/local/cuda/bin
