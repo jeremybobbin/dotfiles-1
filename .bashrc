@@ -140,3 +140,12 @@ export BOOST_LIB_SUFFIX=
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-5.5/lib64:/lib
 # Add cuda binaries to the path.
 export PATH=$PATH:/usr/local/cuda/bin
+
+##
+## Main
+##
+
+if [[ ! $TERM =~ screen ]]; then
+    exec tmux
+fi
+alias g='cd ~/games'
