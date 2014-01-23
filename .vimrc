@@ -97,6 +97,7 @@ syntax on
 set listchars=eol:⇃,tab:→\ ,trail:↤,extends:>,precedes:<
 set list
 
+" Set the proper tab / whitespace handling for a given programming language
 if has("autocmd")
   " enable file type search
   filetype plugin on
@@ -106,4 +107,9 @@ if has("autocmd")
     autocmd FileType go,c,cpp  set noexpandtab tabstop=8 shiftwidth=8 textwidth=78
     autocmd FileType css,sass,html  set noexpandtab tabstop=8 shiftwidth=8 textwidth=78
     autocmd FileType python,lua set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=79
+    autocmd FileType lisp,clisp,cl,elisp,clj set expandtab tabstop=2 shiftwidth=2 softtabstop=2 textwidth=79
 endif
+
+" add spacebar insert single char
+:nmap <Space> i_<Esc>r
+
