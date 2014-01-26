@@ -1,0 +1,27 @@
+#!/bin/bash
+cmd=$1
+essid=$2
+uuid=$(nmcli con list | grep $essid | head -n1 | awk '{ print $2 }')
+usage() {
+	cat 1>&2 <<EOF
+Usage:
+	$0 <cmd>
+
+	cmds: down, up, list
+EOF
+}
+case "$cmd" in
+	down)	
+		sudo nmcli con down uuid $uuid
+		;;
+	up)	
+		sudo nmcli con up uuid $uuid
+		;;
+	list)
+		nmcli con list
+		;;
+	*)
+		usage
+		exit 1
+		;;
+esac
