@@ -1,5 +1,5 @@
 #!/bin/bash
-PADLENGTH=50
+PADLENGTH=79
 cmd=$1
 usage() {
 	cat 1>&2 <<EOF
@@ -26,7 +26,7 @@ padstring() {
 	padleft=$1
 	padwith=$2
 	padright=$3
-	pad=$(printf '%0.1s' "$padwith"{1..60})
+	pad=$(printf '%0.1s' "$padwith"{1..1000})
 	padlength=$PADLENGTH
 	printf '%s' "$padleft"
 	printf '%*.*s' 0 $((padlength - ${#padleft} - ${#padright} )) "$pad"
