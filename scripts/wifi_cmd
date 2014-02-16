@@ -6,13 +6,27 @@ usage() {
 Usage:
 	$0 <cmd>
 
-	cmds: down, up, list
+	cmds: down, up, list, vpn [up, down], status,
+	      create ssid psk
 EOF
 }
 uuid() {
 	nmcli con list | grep $essid | head -n1 | awk '{ print $2 }'
 }
+vpnuuid() {
+	nmcli con list | grep vpn | head -n1 | awk '{ print $2 }'
+}
 case "$cmd" in
+	scan)
+		IFS='--';
+		for f in $(iwlist eth1 s | grep -A 3 Qual);
+		do 
+			IFS=' '
+			quality=$(echo $f | grep Quality | sed 's/.*Quality=//' | sed 's/\/.*//')
+			essid=$(echo $f | grep ESSID | awk -F\" '{ print $2 }')
+			echo $essid $quality
+		done
+		;;
 	down)	
 		sudo nmcli con down uuid `uuid`
 		;;
@@ -22,8 +36,49 @@ case "$cmd" in
 	list)
 		nmcli con list
 		;;
+	vpn)
+		if [ "$2" == "up" ]; then
+			subcmd=up
+		else
+			subcmd=down
+		fi
+		sudo nmcli con $subcmd uuid `vpnuuid`
+		;;
+	status)
+		nmcli con status;
+		;;
+	create)
+		NMPATH=/etc/NetworkManager/system-connections
+		# this needs to be created as a file in:
+		# /etc/NetworkManager/system-connections/SSID
+		echo 1>&2 "Append this to ${NMPATH}"
+		cat > /dev/null <<EOF
+		[connection]
+		id=jns3
+		uuid=$(uuidgen)
+		type=802-11-wireless
+
+		[802-11-wireless]
+		ssid=${SSID}
+		mode=infrastructure
+		mac-address=${MAC_ADDR}
+		security=802-11-wireless-security
+
+		[802-11-wireless-security]
+		key-mgmt=wpa-psk
+		auth-alg=open
+		psk=${PSK}
+
+		[ipv4]
+		method=auto
+
+		[ipv6]
+		method=auto
+EOF
+		;;
 	*)
 		usage
 		exit 1
 		;;
 esac
+
