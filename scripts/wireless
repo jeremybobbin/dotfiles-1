@@ -1,0 +1,98 @@
+#!/bin/bash
+#
+#	wireless
+#	=========
+#	wireless command tool
+#
+#	:created: 2014-02-18 19:25:49 +0800
+#	:copyright: (c) 2014, Lambda Labs, Inc.
+#	:license: All Rights Reserved.
+#
+NARGS=$#
+DEVICE=eth1
+cmd=$1
+usage() {
+	cat 1>&2 <<EOF
+Usage:
+	$0 <cmd>
+
+	cmds:
+		(l)ist, (s)can
+		(c)onnect
+		(u)p, (d)own
+		status
+		(v)pn vpn_name
+		vpn-off
+		vpn-new vpn_name vpn_server vpn_username vpn_password
+		vpn-list
+EOF
+}
+
+require_args() {
+	if [ "$NARGS" != "$1" ]; then usage; exit 1; fi
+}
+case "$cmd" in
+	u|up)
+		sudo ifconfig eth1 up
+		;;
+	d|down)
+		sudo ifconfig eth1 down
+		;;
+	st|status)
+		iwconfig $DEVICE
+		echo Address:
+		ifconfig | grep $DEVICE -A 1 | grep inet
+		;;
+	s|scan|l|list)
+		IFS='--';
+		sudo iwlist eth1 s | grep -A 3 Qual
+		;;
+	c|connect)
+		ESSID=$2
+		sudo wpa_supplicant -B -ieth1 -c /home/sabalaba/wifi/${ESSID}.conf -D wext
+		sudo dhclient -r
+		sudo dhclient eth1
+		;;
+	vpn)
+		require_args 2
+		vpn_name=$2
+		sudo pon --quick $vpn_name nodetach
+		sudo route del default $DEVICE
+		sudo route add default dev ppp0
+		sudo dhclient -r
+		sudo dhclient eth1
+		;;
+	vpn-list)
+		ls /etc/ppp/peers
+		;;
+	vpn-off)
+		sudo poff $vpn_name
+		sudo route del default ppp0
+		sudo route add default dev $DEVICE
+		sudo dhclient -r
+		sudo dhclient eth1
+		;;
+	vpn-new)
+		vpn_name=$2
+		vpn_server=$3
+		vpn_username=$4
+		vpn_password=$5
+		require_args 5
+		echo 1>&2 "Redirect to /etc/ppp/peers/${vpn_name}"
+		cat <<EOF
+remotename ${vpn_name}
+linkname ${vpn_name}
+ipparam ${vpn_name}
+pty "${vpn_server} --nolaunchpppd"
+name ${vpn_username}
+usepeerdns
+require-mppe
+refuse-eap
+noauth
+EOF
+		echo 1>&2 "#Append this to /etc/ppp/chap-secrets"
+		cat 1>&2 <<EOF
+#${vpn_username}	${vpn_name}	${vpn_password}	*
+EOF
+		;;
+esac
