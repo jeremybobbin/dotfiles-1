@@ -17,9 +17,12 @@ Usage:
 	$0 <cmd>
 
 	cmds:
-		(l)ist, (s)can
-		(c)onnect
-		(u)p, (d)own
+		(l)ist
+			lists available hotspots sorted by quality
+		(s)can
+		(c)onnect essid
+		(u)p
+		(d)own
 		status
 		(v)pn vpn_name
 		vpn-off
@@ -32,6 +35,10 @@ require_args() {
 	if [ "$NARGS" != "$1" ]; then usage; exit 1; fi
 }
 case "$cmd" in
+	h|help)
+		usage
+		exit 0
+		;;
 	u|up)
 		sudo ifconfig eth1 up
 		;;
@@ -45,7 +52,18 @@ case "$cmd" in
 		;;
 	s|scan|l|list)
 		IFS='--';
-		sudo iwlist eth1 s | grep -A 3 Qual
+		SCAN=$(sudo iwlist eth1 s)
+		essids=$(echo "$SCAN" | grep -Po "ESSID:.*" |
+			awk -F: '{ print $2 }')
+		quality=$(echo "$SCAN" | grep -Po "Quality=.*" |
+			awk '{ print $1 }')
+		tmp_essids=/tmp/tmpfile_essids.$$
+		tmp_quality=/tmp/tmpfile_quality.$$
+		echo $essids > $tmp_essids
+		echo $quality>  $tmp_quality
+		# print sorted results
+		paste -d '    ' $tmp_quality $tmp_essids |
+			sort -n -t/ -k 1 -r
 		;;
 	c|connect)
 		ESSID=$2
