@@ -28,12 +28,20 @@ Usage:
 		(u)p
 		(d)own
 		status
+			exit code is 0 if connected and has ip, 1 if not.
 		(v)pn vpn_name
 		vpn-route
 		vpn-off
 		vpn-new vpn_name vpn_server vpn_username vpn_password
 		vpn-list
 EOF
+}
+
+put_up_if_down() {
+	if ! wireless status &> /dev/null
+	then 
+		wireless up
+	fi
 }
 
 require_args() {
@@ -84,6 +92,7 @@ case "$cmd" in
 		;;
 	c|connect)
 		ESSID=$2
+		put_up_if_down
 		sudo wpa_supplicant -B -ieth1 -c /home/sabalaba/wifi/"${ESSID}".conf -D wext
 		sudo dhclient -r
 		sudo dhclient eth1
