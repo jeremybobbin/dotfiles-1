@@ -6,8 +6,9 @@ LSEPE=
 RSEP=|
 RSEPE=|
 
-CLOCK=⌚
-CALENDAR=☼
+CALENDAR=
+BATTERY_PRE=B
+DATETIME=⌚
 MUSIC=♫
 
 WIDTH=${1}
@@ -25,7 +26,7 @@ fi
 if [[ "$WIDTH" -ge "$SMALL" ]]; then
   UNAME="#[fg=colour252,bg=colour236,nobold,noitalics,nounderscore]$RSEP#[fg=colour16,bg=colour252,bold,noitalics,nounderscore] $(uname -n)"
 fi
-DATE="#[fg=colour236,bg=${date_colour:-default},nobold,noitalics,nounderscore]$RSEP#[fg=colour247,bg=colour236,nobold,noitalics,nounderscore] $CALENDAR $(date +'%Y-%m-%d')"
-TIME="#[fg=colour241,bg=colour236,nobold,noitalics,nounderscore]$RSEPE#[fg=colour252,bg=colour236,bold,noitalics,nounderscore] $CLOCK $(date +'%H:%M')"
+DATETIME="$CALENDAR $(date +'%Y-%m-%d %H:%M')"
+BATTERY="$BATTERY_PRE $(battery_life.sh)"
 
-echo "$MPD $DATE $TIME $UNAME " | sed 's/ *$/ /g'
+echo "$MPD $BATTERY $DATETIME $UNAME " | sed 's/ *$/ /g'

@@ -8,6 +8,7 @@
 #	:copyright: (c) 2014, Lambda Labs, Inc.
 #	:license: All Rights Reserved.
 #
+WIFI_CONF_DIR=~/wifi
 NARGS=$#
 DEVICE=eth1
 cmd=$1
@@ -17,14 +18,18 @@ Usage:
 	$0 <cmd>
 
 	cmds:
-		(l)ist
-			lists available hotspots sorted by quality
 		(s)can
+			show all available wireless hotspots sorted by quality
+		(l)ist
+			lists available hotspots sorted by quality with valid configs
+		ls
+			list available wireless configurations
 		(c)onnect essid
 		(u)p
 		(d)own
 		status
 		(v)pn vpn_name
+		vpn-route
 		vpn-off
 		vpn-new vpn_name vpn_server vpn_username vpn_password
 		vpn-list
@@ -50,35 +55,50 @@ case "$cmd" in
 		echo Address:
 		ifconfig | grep $DEVICE -A 1 | grep inet
 		;;
-	s|scan|l|list)
+	ls)
+		ls $WIFI_CONF_DIR
+		;;
+	l|list)
+		wireless scan | grep ^1
+		;;
+	s|scan)
 		IFS='--';
 		SCAN=$(sudo iwlist eth1 s)
 		essids=$(echo "$SCAN" | grep -Po "ESSID:.*" |
 			awk -F: '{ print $2 }')
 		quality=$(echo "$SCAN" | grep -Po "Quality=.*" |
 			awk '{ print $1 }')
-		tmp_essids=/tmp/tmpfile_essids.$$
-		tmp_quality=/tmp/tmpfile_quality.$$
-		echo $essids > $tmp_essids
-		echo $quality>  $tmp_quality
+		essids_quality=$(paste -d '    ' <(echo $essids) <(echo $quality) |
+					sort -n -t/ -k 1 -r)
 		# print sorted results
-		paste -d '    ' $tmp_quality $tmp_essids |
-			sort -n -t/ -k 1 -r
+		IFS='
+'
+		echo "$(for essid_quality in $essids_quality
+		do
+			FSEP=" Quality="
+			essid=$(echo $essid_quality | awk -F$FSEP '{ print $1 }' | sed s/^\"// | sed s/\"$//)
+			quality=$(echo $essid_quality | awk -F$FSEP '{ print $2 }')
+			if ls ${WIFI_CONF_DIR}/${essid}.conf &> /dev/null; then exists=1; else exists=0; fi
+			echo "$exists	$quality	\"$essid\""
+		done)" | sort -nr
 		;;
 	c|connect)
 		ESSID=$2
-		sudo wpa_supplicant -B -ieth1 -c /home/sabalaba/wifi/${ESSID}.conf -D wext
+		sudo wpa_supplicant -B -ieth1 -c /home/sabalaba/wifi/"${ESSID}".conf -D wext
 		sudo dhclient -r
 		sudo dhclient eth1
 		;;
 	vpn)
 		require_args 2
 		vpn_name=$2
-		sudo pon --quick $vpn_name nodetach
+		echo 1>&2 "Call wireless vpn-route after this succeeds."
+		sudo pon $vpn_name nodetach
+		;;
+	vpn-route)
 		sudo route del default $DEVICE
 		sudo route add default dev ppp0
-		sudo dhclient -r
-		sudo dhclient eth1
+#		sudo dhclient -r
+#		sudo dhclient eth1
 		;;
 	vpn-list)
 		ls /etc/ppp/peers
@@ -112,5 +132,9 @@ EOF
 		cat 1>&2 <<EOF
 #${vpn_username}	${vpn_name}	${vpn_password}	*
 EOF
+		;;
+	*)
+		usage
+		exit 0
 		;;
 esac

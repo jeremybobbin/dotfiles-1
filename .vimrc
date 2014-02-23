@@ -104,10 +104,10 @@ if has("autocmd")
   " use filetype indent
   filetype indent on
     " Consistent with the Linux Kernel Coding Style Guidelines
-    autocmd FileType go,c,cpp,opencl  set noexpandtab tabstop=8 shiftwidth=8 textwidth=78
     autocmd FileType css,sass,html  set noexpandtab tabstop=8 shiftwidth=8 textwidth=78
     autocmd FileType python,lua set expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=79
-    autocmd FileType lisp,clisp,cl,elisp,clj set expandtab tabstop=2 shiftwidth=2 softtabstop=2 textwidth=79
+    autocmd FileType elisp,clj set expandtab tabstop=2 shiftwidth=2 softtabstop=2 textwidth=79
+    autocmd FileType go,c,cpp,opencl  set noexpandtab tabstop=8 shiftwidth=8 textwidth=78
 endif
 
 " add spacebar insert single char
