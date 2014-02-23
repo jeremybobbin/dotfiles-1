@@ -45,6 +45,30 @@ wf
 wt
 	World Time
 
+wireless
+	The commandline wireless tool.
+```sh
+	Usage:
+		/home/sabalaba/public_scripts/wireless <cmd>
+
+		cmds:
+			(s)can
+				show all available wireless hotspots sorted by quality
+			(l)ist
+				lists available hotspots sorted by quality with valid configs
+			ls
+				list available wireless configurations
+			(c)onnect essid
+			(u)p
+			(d)own
+			status
+			(v)pn vpn_name
+			vpn-route
+			vpn-off
+			vpn-new vpn_name vpn_server vpn_username vpn_password
+			vpn-list
+```
+
 zipfiles
 	Zips the columns of two files together.
 
