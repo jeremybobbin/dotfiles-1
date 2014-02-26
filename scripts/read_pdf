@@ -1,0 +1,25 @@
+#!/bin/sh
+BN=`basename $0`
+READ_DOTFILE=~/.read_history
+READER=mupdf
+last_read() {
+	head -n1 $READ_DOTFILE
+}
+usage() {
+	cat 1>&2 <<EOF
+Usage:
+	$BN
+		read last pdf
+	$BN pdf_to_read
+		read a pdf
+
+Saves last read pdf to ~/.read.
+EOF
+}
+
+if ! test -z "$1"
+then
+	echo $1 >> $READ_DOTFILE
+fi
+
+$READER `last_read`

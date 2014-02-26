@@ -24,7 +24,7 @@ Usage:
 			lists available hotspots sorted by quality with valid configs
 		ls
 			list available wireless configurations
-		(c)onnect essid
+			(c)onnect (essid)
 		(u)p
 		(d)own
 		status
@@ -34,6 +34,10 @@ Usage:
 		vpn-off
 		vpn-new vpn_name vpn_server vpn_username vpn_password
 		vpn-list
+	
+	global variables:
+		export WIFI_DEFAULT="YOUR_ESSID"
+		This will automatically be used when typing wireless connect .
 EOF
 }
 
@@ -47,6 +51,28 @@ put_up_if_down() {
 require_args() {
 	if [ "$NARGS" != "$1" ]; then usage; exit 1; fi
 }
+
+get_essid() {
+	if ! test -z "$1"
+	then
+		echo $1
+	else
+		if ! test -z "$WIFI_DEFAULT"
+		then
+			echo $WIFI_DEFAULT
+		else
+			list=$(wireless list | head -n1)
+			num=$(echo "$list" | wc -l)
+			if [ "$num" > "0" ]
+			then
+				echo "$list" | awk -F'\t' '{ print $3 }' | sed 's/"//g'
+			else
+				require_args 2
+			fi
+		fi
+	fi
+}
+
 case "$cmd" in
 	h|help)
 		usage
@@ -70,6 +96,7 @@ case "$cmd" in
 		wireless scan | grep ^1
 		;;
 	s|scan)
+		put_up_if_down
 		IFS='--';
 		SCAN=$(sudo iwlist eth1 s)
 		essids=$(echo "$SCAN" | grep -Po "ESSID:.*" |
@@ -91,7 +118,8 @@ case "$cmd" in
 		done)" | sort -nr
 		;;
 	c|connect)
-		ESSID=$2
+		ESSID=$(get_essid "$2")
+		echo 1>&2 Connecting to $ESSID.
 		put_up_if_down
 		sudo wpa_supplicant -B -ieth1 -c /home/sabalaba/wifi/"${ESSID}".conf -D wext
 		sudo dhclient -r
