@@ -27,32 +27,6 @@ shopt -s checkwinsize
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color) color_prompt=yes;;
-esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
-fi
-
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -70,27 +44,6 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
-fi
-
-
 # set PS1 to include the last
 MYPSDIR='$(echo "`basename ${PWD/#$HOME/~}`")'
 # color the last status red if error status.
@@ -100,16 +53,10 @@ PS1='$(eval "echo $LAST_STATUS")|$USER@$HOSTNAME:$(eval "echo $MYPSDIR")$ '
 export EDITOR=vim
 source ~/public_scripts/settings
 export PATH=$PATH:~/public_scripts:~/bin
-#export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/platform-tools
-#export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/tools
-#export PATH=$PATH:/home/sabalaba/data/adt-bundle-linux-x86_64-20130522/sdk/build-tools/android-4.2.2
 export PATH=${PATH}:/home/sabalaba/data/android-sdks/tools
 export PATH=${PATH}:/home/sabalaba/data/android-sdks/platform-tools
 export PATH=$PATH:/home/sabalaba/gcc-arm-none-eabi-4_6-2012q2/bin
 
-case $OSTYPE in 
-darwin*) PATH=$PATH:/Applications/Xcode.app/Contents/Developer/usr/bin/ ;;
-esac
 
 # Aliases
 alias work='cd ~/WORK'
@@ -118,11 +65,10 @@ alias play='cd ~/PLAY'
 # Never use emacs gui...
 alias emacs='emacs -nw'
 export PATH=~/pebble-dev/arm-cs-tools/bin:$PATH
-export PATH=$PATH:/home/sabalaba/Pictures/out_garry_yc_s13_happyhour_Fri-Aug--9-14:55:50-PDT-2013/lmb/scripts/
 export LD_LIBRARY_PATH=/home/$USER/eagle-6.2.0/lib
 
 # Set prompt command
-export PROMPT_COMMAND='LAST_CMD_STATUS=$?; history -a;'
+# export PROMPT_COMMAND='LAST_CMD_STATUS=$?; history -a;'
 
 # Android
 export USE_CCACHE=1
@@ -138,6 +84,7 @@ export BOOST_INCLUDE_PATH=/usr/include/boost
 export BOOST_LIB_PATH=/usr/lib
 export BOOST_LIB_SUFFIX=
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-5.5/lib64:/lib
+
 # Add cuda binaries to the path.
 export PATH=$PATH:/usr/local/cuda/bin
 
@@ -150,3 +97,17 @@ if [[ ! $TERM =~ screen ]]; then
 fi
 alias g='cd ~/games'
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/intel/opencl-1.2-3.2.1.16712/lib64
+# OS Specific
+case $OSTYPE in
+	darwin*)
+		PATH=$PATH:/Applications/Xcode.app/Contents/Developer/usr/bin/
+		;;
+esac
+
+VENVS=${HOME}/venv
+activate_venv() {
+	VENV=$1
+	. ${VENVS}/$VENV/bin/activate
+}
+export SURFRAW_text_browser=w3m
+export SURFRAW_graphical_browser=chromium-browser
