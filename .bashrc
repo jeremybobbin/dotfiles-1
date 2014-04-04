@@ -111,3 +111,4 @@ activate_venv() {
 }
 export SURFRAW_text_browser=w3m
 export SURFRAW_graphical_browser=chromium-browser
+alias chrome='chromium-browser &> /dev/null &'

@@ -1,0 +1,7 @@
+#!/bin/sh
+# start trayer, setup xrandr
+BG=~/lambda/business/lambda-labs-logo_180x180_black.png
+xrandr --output DP1 --mode 1920x1080 --right-of eDP1
+trayer --edge bottom --align center --SetDockType true --SetPartialStrut true --expand true --width 5 --height 18 --transparent true --alpha 155 &>/dev/null &
+sudo nm-applet &> /dev/null &
+feh --bg-center $BG
