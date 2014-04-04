@@ -1,0 +1,282 @@
+#!/bin/bash
+#
+# videomerge3d.sh - Take 2 input video files and compose them together
+#                    into stereo side-by-side video with stereo sound.
+#
+# Copyright (C) 2011 Justin Jones
+# with thanks to Ray Strode for bash script gstreamer example eb1304-to-ogg.sh.
+# and of course the GStreamer team!
+
+
+# This file is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; either version 2 of the License,
+# or (at your option) any later version.
+#
+# This file is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this; see the file COPYING.  If not, write to the Free
+# Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+
+
+function usage ()
+{
+    echo "$0 { [-option] [leftfile rightfile ] [output.avi] }" 2>&1
+    echo "Files will be joined as a single left right video file." 2>&1
+    echo "You must have GStreamer plugins to support options below." 2>&1
+    echo "NOTE: default output is 1280x720. Change via options (e.g. -640 or -1080p )." 2>&1
+    echo "Warning:h264 is (was) broken - use mpeg4 (default) instead" 2>&1
+    echo " " 2>&1
+    echo "  Options:" 2>&1
+    echo "-play dont' save, just play. If one file supplied this is implied."
+    echo "-play with two files supplied will join them before playing."
+    echo "-norun will produce the gstreamer commandline for you to (modify and) run seperately"
+    echo "-v	verbose" 2>&1
+    echo "  Video Compression:" 2>&1
+    echo "-h264  h264 video compression " 2>&1
+    echo "-mpeg4_b2  bitrate = 2Mb/S" 2>&1
+    echo "-mpeg4_b4  bitrate = 4Mb/S (default)" 2>&1
+    echo "-mpeg4_b6  bitrate = 6Mb/S" 2>&1
+    echo "-mpeg4_b8  bitrate = 8Mb/S" 2>&1
+    echo "-jpeg  jpeg video compression" 2>&1
+    echo "-mpeg2 mpeg1/2 encoder" 2>&1
+    echo "  Audio Compression:" 2>&1
+    echo "-aac   aac audio compression (default)" 2>&1
+    echo "-mp3   mp3 audio compression" 2>&1
+    echo "-celt  celt audio compression" 2>&1
+    echo "-ano  no audio compression" 2>&1
+    echo "  Containers:" 2>&1
+    echo "-avi  avi (default)" 2>&1
+    echo "-ogg	ogg" 2>&1
+    echo "-mtk	matroska" 2>&1
+    echo "-asf  MS's asf" 2>&1
+    echo "-flv  flash video" 2>&1
+    echo "  Resolutions: (resulting video is double this width)" 2>&1
+    echo "-640   scale to 640x480" 2>&1
+    echo "-320   scale to 320x240" 2>&1
+    echo "-720p  scale to 1280x720 (default)" 2>&1
+    echo "-360p  scale to 640x360" 2>&1
+    echo "-180p  scale to 320x180" 2>&1
+    echo "-1080p scale to 1920x1080" 2>&1
+    echo "-540p  scale to 960x540" 2>&1
+    echo "-270p  scale to 480x270" 2>&1
+    echo "  Effects:" 2>&1
+    echo "-ste   stereophonic enhance" 2>&1
+    echo "-soundLR (default) - left video = left speaker, right video = right speaker" 2>&1
+    echo "-soundL - use left video as source" 2>&1
+    echo "-soundR - use right video as source" 2>&1
+}
+
+NUMBER_OF_FILES=0
+LAUNCH_ARGS=""
+audioenc="faac !"
+videoenc="ffenc_mpeg4 bitrate=4000000"
+wxh="width=640, height=480"
+offset="-1280"
+avmuxer="avimux"
+play=0
+doaudio="Left. ! decodebin ! audioconvert ! audiopanorama panorama=1.00 ! queue2  ! addaudio. \
+ Right. ! decodebin ! audioconvert ! audiopanorama panorama=-1.00 ! queue2  ! addaudio. "
+
+stereoEnhance=""
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -v)
+            LAUNCH_ARGS="$LAUNCH_ARGS -v"
+        ;;
+        -640)
+            wxh="width=640, height=480"
+	    offset="-640"
+        ;;
+        -320)
+            wxh="width=320, height=240"
+	    offset="-320"
+        ;;
+         -720p)
+            wxh="width=1280, height=720"
+	    offset="-1280"
+        ;;
+        -360p)
+            wxh="width=640, height=360"
+	    offset="-640"
+        ;;
+        -180p)
+            wxh="width=320, height=180"
+	    offset="-320"
+        ;;
+        -1080p)
+            wxh="width=1920, height=1080"
+	    offset="-1920"
+        ;;
+        -540p)
+            wxh="width=960, height=540"
+	    offset="-960"
+        ;;
+        -270p)
+            wxh="width=480, height=270"
+	    offset="-480"
+        ;;
+        -h264)
+            videoenc="x264enc"
+	;;
+	-mpeg4_b2)
+	    videoenc="ffenc_mpeg4 bitrate=2000000"
+        ;;
+	-mpeg4_b4)
+	    videoenc="ffenc_mpeg4 bitrate=4000000"
+        ;;
+	-mpeg4_b6)
+	    videoenc="ffenc_mpeg4 bitrate=6000000"
+        ;;
+	-mpeg4_b8)
+	    videoenc="ffenc_mpeg4 bitrate=8000000"
+        ;;
+        -jpeg)
+            videoenc="jpegenc"
+        ;;
+        -mpeg2)
+            videoenc="mpeg2enc"
+        ;;
+	-play)
+	    play=1
+	;;
+	-norun)
+	    norun=1
+        ;;
+        -aac)
+            audioenc="faac !"
+        ;;
+        -mp3)
+            audioenc="lamemp3enc !"
+	;;
+        -celt)
+            audioenc="celtenc !"
+        ;;
+        -ano)
+            audioenc=""
+        ;;
+        -avi)
+            avmuxer="avimux"
+        ;;
+        -ogg)
+            avmuxer="oggmux"
+        ;;
+        -mtk)
+            avmuxer="matroskamux"
+        ;;
+        -asf)
+            avmuxer="asfmux"
+        ;;
+        -flv)
+            avmuxer="flvmux"
+        ;;
+        -ste)
+            stereoEnhance="stereo !"
+        ;;
+	-soundL)
+	doaudio="Left. ! decodebin ! audioconvert ! queue2  ! addaudio. "
+        ;;
+	-soundR)
+	doaudio="Right. ! decodebin ! audioconvert ! queue2  ! addaudio. "
+        ;;
+	-soundLR)
+	doaudio="Left. ! decodebin ! audioconvert ! audiopanorama panorama=1.00 ! queue2  ! addaudio. Right. ! decodebin ! audioconvert ! audiopanorama panorama=-1.00 ! queue2  ! addaudio. "
+        ;;
+
+        --help|-h)
+            usage
+            exit 0
+        ;;
+
+        *)
+            if [ ! -f "$1" ]; then
+                if [ "${1:0:1}" = "-" ]; then
+                    usage
+                    exit 1
+                fi
+            fi
+
+            FILES[$NUMBER_OF_FILES]="$1"
+            NUMBER_OF_FILES=$[NUMBER_OF_FILES + 1]
+        ;;
+    esac
+    shift
+done
+
+if [ $NUMBER_OF_FILES -eq 2 ]; then
+    INPUT_VIDEO_L="${FILES[0]}"
+    INPUT_VIDEO_R="${FILES[1]}"
+    OUTPUT_FILE="video-`date +%Y.%m.%d-%H.%M.%S`.avi"
+elif [ $NUMBER_OF_FILES -eq 3 ]; then
+    INPUT_VIDEO_L="${FILES[0]}"
+    INPUT_VIDEO_R="${FILES[1]}"
+    OUTPUT_FILE="${FILES[2]}"
+elif [ $NUMBER_OF_FILES -eq 1 ]; then
+    INPUT_VIDEO_L="${FILES[0]}"
+    play=2
+else
+    usage
+    exit 1
+fi
+
+if [ $play = 2 ];then
+
+ command="gst-launch-0.10 filesrc location=$INPUT_VIDEO_L\
+ ! decodebin2 name=Left ! videoscale ! ffmpegcolorspace ! xvimagesink \
+ Left. ! decodebin2 ! audioconvert ! queue2 ! autoaudiosink"
+
+elif [ $play = 1 ];then
+
+ command="gst-launch-0.10 $LAUNCH_ARGS \
+ filesrc location=$INPUT_VIDEO_L \
+ ! decodebin2 name=Left \
+ filesrc location=$INPUT_VIDEO_R \
+ ! decodebin2 name=Right \
+ Left. ! videoscale ! ffmpegcolorspace ! video/x-raw-yuv, $wxh \
+ ! videobox border-alpha=0 right=$offset ! queue2 ! mix. \
+ Right. ! videoscale ! ffmpegcolorspace ! video/x-raw-yuv, $wxh \
+ ! videobox border-alpha=0 left=$offset ! queue2 ! mix. \
+ $doaudio \
+ adder name=addaudio ! queue2 ! autoaudiosink \
+ videomixer name=mix ! ffmpegcolorspace ! xvimagesink "
+ 
+
+else
+
+ echo "$wxh  $videoenc  $audioenc" 2>&1
+ echo "saving file to $OUTPUT_FILE" 2>&1
+
+ command="gst-launch-0.10 $LAUNCH_ARGS \
+ filesrc location=$INPUT_VIDEO_L \
+ ! decodebin name=Left \
+ filesrc location=$INPUT_VIDEO_R \
+ ! decodebin name=Right \
+ Left. ! videoscale ! ffmpegcolorspace ! video/x-raw-yuv, $wxh \
+ ! videobox border-alpha=0 right=$offset ! queue2  ! mix. \
+ Right. ! videoscale ! ffmpegcolorspace ! video/x-raw-yuv, $wxh \
+ ! videobox border-alpha=0 left=$offset ! queue2  ! mix. \
+ $doaudio \
+ adder name=addaudio ! $audioEnc  $stereoEnhance queue2  ! avmux.  \
+ videomixer name=mix ! ffmpegcolorspace ! $videoenc ! \
+ $avmuxer name=avmux ! progressreport name=\"Encoding Progress\" ! filesink location=\"$OUTPUT_FILE\" "
+ 
+
+fi
+
+if [ $norun = 1 ]; then
+  echo "Command:"
+  echo $command
+  
+else
+
+  echo "Running Command: $command"
+  $command
+
+fi

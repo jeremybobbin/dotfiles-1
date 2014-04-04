@@ -1,4 +1,3 @@
 #!/bin/sh
-exec /usr/bin/stumpwm
-xmodmap /home/sabalaba/dotfiles/capslock
-exec /home/sabalaba/dotfiles/monitor
+trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 50 --height 25 &>/dev/null &
+#sudo nm-applet --sm-disable &>/dev/null &

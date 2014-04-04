@@ -8,9 +8,13 @@
 #	:copyright: (c) 2014, Lambda Labs, Inc.
 #	:license: All Rights Reserved.
 #
-WIFI_CONF_DIR=~/wifi
+WIFI_CONFIG_DIR=~/.config/wireless
+WIFI_AP_DIR=$WIFI_CONFIG_DIR/aps
+WIFI_HISTORY_FILE=$WIFI_CONFIG_DIR/history
 NARGS=$#
 DEVICE=eth1
+mkdir -p $WIFI_CONFIG_DIR
+mkdir -p $WIFI_AP_DIR
 cmd=$1
 usage() {
 	cat 1>&2 <<EOF
@@ -29,16 +33,31 @@ Usage:
 		(d)own
 		status
 			exit code is 0 if connected and has ip, 1 if not.
+		(cnp), connect-nopass router_ip your_ip essid
+			connect to essid with router ip and set your ip manually
+
 		(v)pn vpn_name
 		vpn-route
 		vpn-off
 		vpn-new vpn_name vpn_server vpn_username vpn_password
 		vpn-list
 	
+	config files:
+		Previous wireless networks will be remembered in ~/.config/wireless/history
 	global variables:
 		export WIFI_DEFAULT="YOUR_ESSID"
 		This will automatically be used when typing wireless connect .
 EOF
+}
+
+renew_ip() {
+	dev=$1
+	sudo dhclient -r
+	sudo dhclient $dev
+}
+
+killall_wpa_supp() {
+	sudo kill -9 $(pgrep wpa_supplicant)
 }
 
 put_up_if_down() {
@@ -61,15 +80,29 @@ get_essid() {
 		then
 			echo $WIFI_DEFAULT
 		else
-			list=$(wireless list | head -n1)
-			num=$(echo "$list" | wc -l)
-			if [ "$num" > "0" ]
+			if test -e $WIFI_HISTORY_FILE
 			then
-				echo "$list" | awk -F'\t' '{ print $3 }' | sed 's/"//g'
+				tail -n1 $WIFI_HISTORY_FILE
 			else
-				require_args 2
+				list=$(wireless list | head -n1)
+				num=$(echo "$list" | wc -l)
+				if [ "$num" > "0" ]
+				then
+					echo "$list" | awk -F'\t' '{ print $3 }' | sed 's/"//g'
+				else
+					require_args 2
+				fi
 			fi
 		fi
+	fi
+}
+
+add_to_history() {
+	ESSID=$1
+	mkdir -p $WIFI_CONFIG_DIR
+	if test -e $WIFI_CONFIG_DIR
+	then
+		echo "$ESSID" >> $WIFI_HISTORY_FILE
 	fi
 }
 
@@ -90,7 +123,7 @@ case "$cmd" in
 		ifconfig | grep $DEVICE -A 1 | grep inet
 		;;
 	ls)
-		ls $WIFI_CONF_DIR
+		ls $WIFI_CONFIG_DIR
 		;;
 	l|list)
 		wireless scan | grep ^1
@@ -98,7 +131,12 @@ case "$cmd" in
 	s|scan)
 		put_up_if_down
 		IFS='--';
-		SCAN=$(sudo iwlist eth1 s)
+		SCAN=$(sudo iwlist $DEVICE s)
+		ecode=$?
+		if [ "$ecode" != "0" ]
+		then
+			exit $ecode
+		fi
 		essids=$(echo "$SCAN" | grep -Po "ESSID:.*" |
 			awk -F: '{ print $2 }')
 		quality=$(echo "$SCAN" | grep -Po "Quality=.*" |
@@ -113,17 +151,37 @@ case "$cmd" in
 			FSEP=" Quality="
 			essid=$(echo $essid_quality | awk -F$FSEP '{ print $1 }' | sed s/^\"// | sed s/\"$//)
 			quality=$(echo $essid_quality | awk -F$FSEP '{ print $2 }')
-			if ls ${WIFI_CONF_DIR}/${essid}.conf &> /dev/null; then exists=1; else exists=0; fi
+			if ls ${WIFI_AP_DIR}/${essid}.conf &> /dev/null; then exists=1; else exists=0; fi
 			echo "$exists	$quality	\"$essid\""
 		done)" | sort -nr
+		;;
+	cnp|connect-nopass)
+		ROUTER_IP=$1
+		YOUR_IP=$2
+		ESSID=$3
+		require_args 3
+		killall_wpa_supp;
+		ESSID=$(get_essid "$2")
+		echo 1>&2 Connecting to $ESSID, an insecure network.
+		add_to_history $ESSID
+		sudo ifconfig $DEVICE down
+		sudo ifconfig $DEVICE $YOUR_IP netmask 255.255.255.0 up
+		route add default gw $ROUTER_IP
+		sudo iwconfig $DEVICE essid "$ESSID"
+#		sudo dhclient -r
+#		sudo iwconfig $DEVICE mode managed ap $MACADDR key open
+#		sudo ifconfig $DEVICE up
+#		sudo dhclient $DEVICE
+#		sudo iwconfig $DEVICE essid "$ESSID"
+#		renew_ip $DEVICE
 		;;
 	c|connect)
 		ESSID=$(get_essid "$2")
 		echo 1>&2 Connecting to $ESSID.
+		add_to_history "$ESSID"
 		put_up_if_down
-		sudo wpa_supplicant -B -ieth1 -c /home/sabalaba/wifi/"${ESSID}".conf -D wext
-		sudo dhclient -r
-		sudo dhclient eth1
+		sudo wpa_supplicant -B -i$DEVICE -c ${WIFI_AP_DIR}/"${ESSID}".conf -D wext
+		renew_ip $DEVICE
 		;;
 	vpn)
 		require_args 2
@@ -134,8 +192,7 @@ case "$cmd" in
 	vpn-route)
 		sudo route del default $DEVICE
 		sudo route add default dev ppp0
-#		sudo dhclient -r
-#		sudo dhclient eth1
+#		renew_ip $DEVICE
 		;;
 	vpn-list)
 		ls /etc/ppp/peers
@@ -144,8 +201,7 @@ case "$cmd" in
 		sudo poff $vpn_name
 		sudo route del default ppp0
 		sudo route add default dev $DEVICE
-		sudo dhclient -r
-		sudo dhclient eth1
+		renew_ip $DEVICE
 		;;
 	vpn-new)
 		vpn_name=$2

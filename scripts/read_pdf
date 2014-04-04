@@ -3,7 +3,7 @@ BN=`basename $0`
 READ_DOTFILE=~/.read_history
 READER=mupdf
 last_read() {
-	head -n1 $READ_DOTFILE
+	tail -n1 $READ_DOTFILE
 }
 usage() {
 	cat 1>&2 <<EOF

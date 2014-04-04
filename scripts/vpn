@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+#	vpn
+#	=========
+#	VPN command line tool
+#
+#	:created: 2014-02-24 10:16:41 +0800
+#	:copyright: (c) 2014, Lambda Labs, Inc.
+#	:license: All Rights Reserved.
+#
+VPN_CONF_DIR=~/vpn
+NARGS=$#
+usage() {
+	cat 1>&2 <<EOF
+Usage:
+	$0 <cmd>
+
+	cmds:
+		(l)ist
+		(c)onnect vpn_name
+			connect to vpn_name
+		(r)oute
+		off
+		on
+		(n)ew vpn_name vpn_server vpn_username vpn_password
+			create a new config file for vpns
+}

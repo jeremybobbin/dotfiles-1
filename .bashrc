@@ -150,4 +150,3 @@ if [[ ! $TERM =~ screen ]]; then
 fi
 alias g='cd ~/games'
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/intel/opencl-1.2-3.2.1.16712/lib64
-export WIFI_DEFAULT='Chaihuo X imlab'

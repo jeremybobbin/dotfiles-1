@@ -11,7 +11,7 @@ Usage:
 EOF
 }
 uuid() {
-	nmcli con list | grep $essid | head -n1 | awk '{ print $2 }'
+	nmcli con list | grep "$essid" | head -n1 | awk -F'           ' '{ print $2 }' | sed 's/  .*//'
 }
 vpnuuid() {
 	nmcli con list | grep vpn | head -n1 | awk '{ print $2 }'
@@ -31,6 +31,9 @@ case "$cmd" in
 		sudo nmcli con down uuid `uuid`
 		;;
 	up)	
+		echo $1
+		echo $2
+		echo `uuid`
 		sudo nmcli con up uuid `uuid`
 		;;
 	list)
