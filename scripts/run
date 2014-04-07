@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+#    run
+#    =========
+#
+#    run a program
+#
+#    :created: 2014-04-04 10:58:47 -0700
+#    :copyright: (c) 2014, Lambda Labs, Inc.
+#    :license: All Rights Reserved.
+#
+$* &> /dev/null &
