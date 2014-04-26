@@ -8,18 +8,44 @@ last_read() {
 usage() {
 	cat 1>&2 <<EOF
 Usage:
-	$BN
-		read last pdf
+	$BN (l)ast
+		last pdf read
 	$BN pdf_to_read
 		read a pdf
+	$BN (h)elp
+		usage
 
 Saves last read pdf to ~/.read.
 EOF
 }
 
-if ! test -z "$1"
-then
-	echo $1 >> $READ_DOTFILE
-fi
+readit() {
+	if ! test -z "$*"
+	then
+		if ! test -e "$*"
+		then
+			echo 1>&2 "File not found. '$*' does not exist."
+			exit 1
+		else
+			echo "$*" >> $READ_DOTFILE
+			$READER "$(last_read)"
+		fi
+	else
+		# read last file!
+		$READER "$(last_read)"
+	fi
+}
 
-$READER `last_read`
+cmd=$1
+
+case "$cmd" in
+	l|last)
+		last_read
+		;;
+	h|help)
+		usage
+		;;
+	*)
+		readit "$*"
+		;;
+esac
