@@ -114,5 +114,5 @@ export SURFRAW_graphical_browser=chromium-browser
 alias chrome='chromium-browser &> /dev/null &'
 
 # Haskell
-export PATH=$PATH:~/.cabal/bin
+export PATH=$PATH:$HOME/.cabal/bin
 alias ghci='ghci -XParallelListComp'
