@@ -21,10 +21,11 @@ main = do
                         <+> manageHook defaultConfig
         , layoutHook = avoidStruts  $  layoutHook defaultConfig
         , startupHook   = execScriptHook mStartupHook
-        , logHook = dynamicLogWithPP xmobarPP
-                        { ppOutput = hPutStrLn xmproc
-                        , ppTitle = xmobarColor "green" "" . shorten 50
-                        }
+-- Oddly, this causes xmonad to stop responding sometimes.
+--        , logHook = dynamicLogWithPP xmobarPP
+--                        { ppOutput = hPutStrLn xmproc
+--                        , ppTitle = xmobarColor "green" "" . shorten 50
+--                        }
         , modMask = myModMask     -- Rebind Mod to the Windows key
         } `additionalKeys` 
         [ ((myModMask .|. shiftMask, xK_b), spawn "chromium-browser &> /dev/null &")
