@@ -4,3 +4,4 @@ xsetroot -cursor_name left_ptr
 # setxkbmap -layout colemak
 # start
 exec xmonad
+xrandr --output DVI-I-3 --rotate left --auto --right-of DVI-I-2 --auto

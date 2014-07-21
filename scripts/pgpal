@@ -1,0 +1,102 @@
+#!/bin/sh
+#
+#    pgpal
+#    =========
+#    A convenient wrapper on gpg.
+#
+#    Right now, focusing on public key encryption.
+#
+#    :created: 2014-07-21 07:01:56 -0700
+#    :copyright: (c) 2014, Lambda Labs, Inc.
+#    :license: All Rights Reserved.
+#
+PROG=$(basename $0)
+CMD=$1
+ARG=$*
+
+usage() {
+	cat 1>&2 <<EOF
+Usage:
+	$PROG <cmd>
+
+	cmds:
+
+		(a)dd <public_key>:
+			Addes a new recipient.
+
+		(l)ist
+			Lists possible recipients.
+
+		(e)ncrypt [recipients]:
+			Reads a file from stdin and encrypts it using each
+			recipient's public key and prints to stdout. Works with
+			multiple recipients.
+
+			$PROG e sabalaba # (Type into stdin and hit  when finished.)
+
+			cat some-plaintext-email.txt | $PROG e s@lambdal.com
+
+			$PROG e sol david joseph@website.com <<EOM
+Hi Sol, David, and Joseph,
+
+I just wanted to let you know that heredocs are very useful.
+
+Best,
+
+Stephen
+EOM
+
+		(d)ecrypt:
+			Decripts a file from stdin, writes to stdout.
+
+			$PROG d < input.txt.enc
+
+		(s)ign:
+			Clearsigns a document. This is useful when you're
+			posting on forums or in situations where you would
+			simply like to let others verify that you are the one
+			posting.
+
+			You can test this functionality like this:
+
+			echo Hello World. | $PROG sign | $PROG verify
+
+		(v)erify:
+			Verifies the signature of a message piped into stdin.
+
+			$PROG v < fishy-signed-email
+
+EOF
+}
+
+cmd=$1
+arg=$*
+case "$cmd" in
+	a|add)
+		gpg --import $arg
+		;;
+	l|list)
+		gpg --list-keys
+		;;
+	e|encrypt)
+		shift
+		rlist=$(for r in $*
+		do
+			echo --recipient $r
+		done)
+		gpg --output - --armor --encrypt $rlist
+		;;
+	d|decrypt)
+		gpg --decrypt
+		;;
+	s|sign)
+		gpg --clearsign
+		;;
+	v|verify)
+		gpg --verify
+		;;
+	*)
+		usage;
+		exit 1;
+		;;
+esac
