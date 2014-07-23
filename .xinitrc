@@ -6,3 +6,5 @@ xsetroot -cursor_name left_ptr
 exec xmonad
 #xrandr --output DVI-I-3 --rotate left --auto --left-of DVI-I-2 --auto
 #xrandr --output DVI-I-2 --rotate left --auto --right-of DVI-I-3 --auto
+xset fp+ $HOME/fonts
+xset fp rehash

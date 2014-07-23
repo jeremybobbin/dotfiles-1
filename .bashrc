@@ -68,6 +68,7 @@ export LD_LIBRARY_PATH=/home/$USER/eagle-6.2.0/lib
 
 # Set prompt command
 # export PROMPT_COMMAND='LAST_CMD_STATUS=$?; history -a;'
+export PROMPT_COMMAND='history -a;history -c;history -r'
 
 # Android
 export USE_CCACHE=1
