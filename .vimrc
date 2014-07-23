@@ -114,7 +114,7 @@ endif
 :nmap <Space> i_<Esc>r
 
 " Automatically call flake8 on write.
-"autocmd BufWritePost *.py call Flake8()
+autocmd BufWritePost *.py call Flake8()
 
 " Pathogen
 execute pathogen#infect()

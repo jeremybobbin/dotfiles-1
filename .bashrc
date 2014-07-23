@@ -53,9 +53,8 @@ PS1='$(eval "echo $LAST_STATUS")|$USER@$HOSTNAME:$(eval "echo $MYPSDIR")$ '
 export EDITOR=vim
 source ~/public_scripts/settings
 export PATH=$PATH:~/public_scripts:~/bin
-export PATH=${PATH}:/home/sabalaba/data/android-sdks/tools
-export PATH=${PATH}:/home/sabalaba/data/android-sdks/platform-tools
-export PATH=$PATH:/home/sabalaba/gcc-arm-none-eabi-4_6-2012q2/bin
+export PATH=${PATH}:/home/sabalaba/sources/adt-bundle-linux-x86_64/sdk/tools
+export PATH=${PATH}:/home/sabalaba/sources/adt-bundle-linux-x86_64/sdk/platform-tools
 
 
 # Aliases

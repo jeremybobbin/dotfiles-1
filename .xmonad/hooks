@@ -15,7 +15,9 @@ fi
 
 if [ -x /usr/bin/xrandr ]
 then
+	xrandr --output DVI-I-2 --rotate left --auto --left-of DVI-I-3 --auto
 	xrandr --output DVI-I-3 --rotate left --auto --right-of DVI-I-2 --auto
+	xrandr --output HDMI-0 --auto --right-of DVI-I-3 --auto
 fi
 
 if [ -x /usr/bin/feh ]
