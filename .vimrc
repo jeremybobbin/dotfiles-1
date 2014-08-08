@@ -124,3 +124,6 @@ let g:syntastic_python_checkers=['flake8']
 let g:syntastic_cpp_check_header = 1
 let b:syntastic_c_cflags = '-Ilib/'
 let b:syntastic_cpp_cflags = '-Ilib/'
+
+" Sparkup (Only works on HTML files)
+let g:sparkup='~/.vim/bundle/vim-sparkup/sparkup.py'
