@@ -8,3 +8,8 @@ exec xmonad
 #xrandr --output DVI-I-2 --rotate left --auto --right-of DVI-I-3 --auto
 xset fp+ $HOME/fonts
 xset fp rehash
+
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+fcitx
