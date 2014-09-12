@@ -92,11 +92,8 @@ export PATH=$PATH:/usr/local/cuda/bin
 ## Main
 ##
 
-if [[ ! $TERM =~ screen ]]; then
-    exec tmux
-fi
 alias g='cd ~/games'
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/intel/opencl-1.2-3.2.1.16712/lib64
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/intel/opencl-1.2-3.2.1.16712/lib64:/usr/lib/atlas-base
 # OS Specific
 case $OSTYPE in
 	darwin*)
