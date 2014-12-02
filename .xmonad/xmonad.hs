@@ -4,6 +4,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.Script
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
+import XMonad.Hooks.SetWMName
 import System.IO
 
 
@@ -20,7 +21,9 @@ main = do
         { manageHook = manageDocks <+> myManageHook -- make sure to include myManageHook definition from above
                         <+> manageHook defaultConfig
         , layoutHook = avoidStruts  $  layoutHook defaultConfig
-        , startupHook   = execScriptHook mStartupHook
+        , startupHook   = do
+            execScriptHook mStartupHook
+            setWMName "LG3D"
 -- Oddly, this causes xmonad to stop responding sometimes.
 --        , logHook = dynamicLogWithPP xmobarPP
 --                        { ppOutput = hPutStrLn xmproc

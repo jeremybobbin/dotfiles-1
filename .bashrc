@@ -113,3 +113,14 @@ alias chrome='chromium-browser &> /dev/null &'
 # Haskell
 export PATH=$PATH:$HOME/.cabal/bin
 alias ghci='ghci -XParallelListComp'
+export PATH=$PATH:/usr/local/cuda-6.5/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-6.5/lib64
+
+# init fastd
+eval "$(fasd --init auto)"
+alias c='fasd_cd -d -i'
+alias f='fasd'
+alias v='fasd -e vim'
+alias p='fasd -e mupdf'
+
+source ~/.paths
