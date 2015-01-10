@@ -1,0 +1,5 @@
+#!/bin/bash
+ADB=./home/sabalaba/sources/adt-bundle-linux-x86_64/sdk/platform-tools/adb
+su
+kill -9 $(ps ax | grep 'adb.*server' | head -n1 | awk '{ print $1}')
+${ADB} devices

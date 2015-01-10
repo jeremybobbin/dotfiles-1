@@ -18,6 +18,7 @@ set wildmenu
 set wildmode=list:longest
 set visualbell
 set cursorline
+set cursorcolumn
 set ttyfast
 set ruler
 set backspace=indent,eol,start
@@ -130,3 +131,6 @@ let g:syntastic_c_compiler = 'g++-4.8'
 " Sparkup (Only works on HTML files)
 let g:sparkup='~/.vim/bundle/vim-sparkup/sparkup.py'
 
+highlight CursorLine cterm=none ctermbg=0 ctermfg=8
+highlight CursorColumn cterm=none ctermbg=0 ctermfg=8
+let g:syntastic_python_python_exe = 'python3'

@@ -83,7 +83,7 @@ export PATH=$PATH:$GOPATH/bin
 export BOOST_INCLUDE_PATH=/usr/include/boost
 export BOOST_LIB_PATH=/usr/lib
 export BOOST_LIB_SUFFIX=
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-5.5/lib64:/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib
 
 # Add cuda binaries to the path.
 export PATH=$PATH:/usr/local/cuda/bin
@@ -111,10 +111,10 @@ export SURFRAW_graphical_browser=chromium-browser
 alias chrome='chromium-browser &> /dev/null &'
 
 # Haskell
-export PATH=$PATH:$HOME/.cabal/bin
+export PATH=$HOME/.cabal/bin:${PATH}
 alias ghci='ghci -XParallelListComp'
 export PATH=$PATH:/usr/local/cuda-6.5/bin
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-6.5/lib64
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-6.5/lib64:/usr/local/cuda-6.5/lib
 
 # init fastd
 eval "$(fasd --init auto)"
@@ -124,3 +124,7 @@ alias v='fasd -e vim'
 alias p='fasd -e mupdf'
 
 source ~/.paths
+export PATH
+
+alias python=python3
+alias ipython=ipython3
