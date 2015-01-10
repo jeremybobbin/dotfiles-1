@@ -1,0 +1,5 @@
+#!/bin/bash
+if [[ -n "$1" ]]; then time_m=$1; else time_m=5; fi
+brew_time=$(($time_m * 60))
+echo "brew_time $brew_time sound $sound"
+sleep $brew_time && chime $2

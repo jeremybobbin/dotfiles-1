@@ -1,0 +1,4 @@
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+CHIME=${DIR}/chime.mp3
+if [[ -n "$1" ]]; then sound=$1; else sound=$CHIME; fi
+mpg123 $sound &> /dev/null
