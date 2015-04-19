@@ -101,11 +101,6 @@ case $OSTYPE in
 		;;
 esac
 
-VENVS=${HOME}/venv
-activate_venv() {
-	VENV=$1
-	. ${VENVS}/$VENV/bin/activate
-}
 export SURFRAW_text_browser=w3m
 export SURFRAW_graphical_browser=chromium-browser
 alias chrome='chromium-browser &> /dev/null &'
@@ -123,8 +118,7 @@ alias f='fasd'
 alias v='fasd -e vim'
 alias p='fasd -e mupdf'
 
-source ~/.paths
-export PATH
+# source ~/.paths
 
 alias python=python3
 alias ipython=ipython3
