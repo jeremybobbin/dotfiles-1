@@ -122,3 +122,5 @@ alias p='fasd -e mupdf'
 
 alias python=python3
 alias ipython=ipython3
+
+alias rsyncp="rsync -a --stats --progress"

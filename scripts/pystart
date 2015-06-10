@@ -4,7 +4,7 @@ DATEYEAR=`date +%Y`
 CREATION=`date "+%Y-%m-%d %H:%M:%S %z"`
 if [[ $1 ]]; then
     FILETEXT="    $1
-    ~~~~~"
+    $(printf '~%.0s' $(seq 1 $(($(echo $1 | wc -c) - 1))))"
 else
     FILETEXT=""
 fi;
@@ -12,7 +12,6 @@ source $SCRIPTDIR/script_env
 
 function pheadEcho {
     echo "#!/usr/bin/env python"
-    echo "# -*- encoding: utf-8 -*-"
     echo "\"\"\"
 $FILETEXT
 
