@@ -64,7 +64,6 @@ alias play='cd ~/PLAY'
 # Never use emacs gui...
 alias emacs='emacs -nw'
 export PATH=~/pebble-dev/arm-cs-tools/bin:$PATH
-export LD_LIBRARY_PATH=/home/$USER/eagle-6.2.0/lib
 
 # Set prompt command
 # export PROMPT_COMMAND='LAST_CMD_STATUS=$?; history -a;'
@@ -83,7 +82,6 @@ export PATH=$PATH:$GOPATH/bin
 export BOOST_INCLUDE_PATH=/usr/include/boost
 export BOOST_LIB_PATH=/usr/lib
 export BOOST_LIB_SUFFIX=
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib
 
 # Add cuda binaries to the path.
 export PATH=$PATH:/usr/local/cuda/bin
@@ -93,7 +91,6 @@ export PATH=$PATH:/usr/local/cuda/bin
 ##
 
 alias g='cd ~/games'
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/intel/opencl-1.2-3.2.1.16712/lib64:/usr/lib/atlas-base
 # OS Specific
 case $OSTYPE in
 	darwin*)
@@ -108,8 +105,8 @@ alias chrome='chromium-browser &> /dev/null &'
 # Haskell
 export PATH=$HOME/.cabal/bin:${PATH}
 alias ghci='ghci -XParallelListComp'
-export PATH=$PATH:/usr/local/cuda-6.5/bin
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-6.5/lib64:/usr/local/cuda-6.5/lib
+export PATH=$PATH:/usr/local/cuda/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/lib
 
 # init fastd
 eval "$(fasd --init auto)"

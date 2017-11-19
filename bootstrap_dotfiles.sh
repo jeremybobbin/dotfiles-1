@@ -1,4 +1,11 @@
 #!/bin/bash
+# Setup FASD
+cd ~
+git clone https://github.com/clvv/fasd.git
+cd fasd/
+sudo make install
+
+# Setup dots
 cd ~
 ln -s dotfiles/.vim .vim
 ln -s dotfiles/.vimrc .vimrc
