@@ -1,4 +1,7 @@
 #!/bin/bash
+# Flake8
+sudo apt-get install flake8 -y
+
 # Setup FASD
 cd ~
 git clone https://github.com/clvv/fasd.git
