@@ -1,4 +1,14 @@
 #!/bin/bash
+# Flake8
+sudo apt-get install flake8 -y
+
+# Setup FASD
+cd ~
+git clone https://github.com/clvv/fasd.git
+cd fasd/
+sudo make install
+
+# Setup dots
 cd ~
 rm -rf ~/public_scripts ~/.vim ~/.vimrc ~/.gitconfig ~/.tmux.conf ~/.bashrc ~/.bash_profile
 
