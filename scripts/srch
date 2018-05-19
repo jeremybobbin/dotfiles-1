@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+#    srch
+#    =========
+#    Find stuff!
+#
+#    :created: 2017-06-03 00:22:08 -0700
+#    :copyright: (c) 2017, Lambda Labs, Inc.
+#    :license: All Rights Reserved.
+#
+
+grep -ir '--include='*.{c,cpp,h,hpp,m,metal,lua,py,js,html,hs,css,sass,yml,json,sh,bash,xml} "$1" .
