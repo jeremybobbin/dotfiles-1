@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ~
-rm -rf ~/.vim ~/.vimrc ~/.gitconfig ~/.tmux.conf ~/.bashrc ~/.bash_profile
+rm -rf ~/public_scripts ~/.vim ~/.vimrc ~/.gitconfig ~/.tmux.conf ~/.bashrc ~/.bash_profile
 
 ln -s ~/dotfiles/.vim ~/.vim
 ln -s ~/dotfiles/.vimrc ~/.vimrc
