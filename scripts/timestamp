@@ -1,4 +1,2 @@
 #!/bin/sh
-date | 	sed 's/  /_/' | 
-	sed 's/:/-/g'    |
-	sed 's/ /_/g'
+date +%a_%d_%b_%G_%I-%M-%S_%p_%Z
