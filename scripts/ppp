@@ -10,7 +10,7 @@
 
 HEAD=`git rev-parse --abbrev-ref HEAD`
 DEFAULT_BASE=develop
-REPO=`git remote -v | grep -o :.*\.git | sed 's/://' | sed 's/\.git//' | tail -n1`
+REPO=`git remote -v | sed -E 's_.*:(.*)\.git.*_\1_' | tail -n1`
 LASTSHORTLOG=$(git shortlog -n1 | tail -n2)
 
 function pushFeat {
